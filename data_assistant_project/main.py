@@ -1,5 +1,7 @@
 import argparse
 import subprocess
+from dotenv import load_dotenv
+import os 
 
 class Main:
     """
@@ -10,6 +12,8 @@ class Main:
         self.parser = argparse.ArgumentParser(description="Data Assistant Interface")
         self.parser.add_argument('--mode', choices=['cli', 'api'], default='api', help="Mode to run the assistant: 'cli' for command-line interface, 'api' for REST API")
         self.parser.add_argument('--prod', action='store_true', help="Run the API in production mode using gunicorn")
+        load_dotenv()
+        print(os.getenv("OPENAI_API_KEY"))
 
     def run(self):
         args = self.parser.parse_args()

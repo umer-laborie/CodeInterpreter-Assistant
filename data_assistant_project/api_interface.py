@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from data_assistant.assistant import DataAssistant
 from data_assistant.config_manager import ConfigManager
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 class DataAssistantAPI:
     """
@@ -32,8 +34,8 @@ class DataAssistantAPI:
         Handles follow-up questions.
         """
         if not self.config_manager.config_exists():
-            return "Assistant not created. Please create the assistant first."
-        self.assistant = DataAssistant("sample_data.xlsx", "", "")
+            # return "Assistant not created. Please create the assistant first."
+            self.assistant = DataAssistant("sample_data.xlsx", "", "")
         return self.assistant.follow_up_question(question)
     
     def reset_configuration(self):
@@ -58,7 +60,9 @@ def create_assistant():
 def follow_up():
     data = request.json
     question = data.get('question')
+    print("this is questions", question)
     response = api_interface.follow_up_question(question)
+    print("this is response", response)
     return jsonify({"response": response}), 200
 
 @app.route('/reset_config', methods=['POST'])
